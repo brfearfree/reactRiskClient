@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Row, Col } from 'react-flexbox-grid';
 import { Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Alignment } from "@blueprintjs/core";
 
 

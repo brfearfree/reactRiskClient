@@ -12,6 +12,24 @@ BODY{
   pointer-events: none;
 }
 
+.mapCanvas{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 30px;
+  width: 30px;
+}
+.mainCanvas{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 600px;
+  width: 857px;
+}
+#mapID{
+  position: relative;
+}
+
 label.bp3-label{max-width: 25%; width: 100%;}
 
 @media (prefers-reduced-motion: no-preference) {

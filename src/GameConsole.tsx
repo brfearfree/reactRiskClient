@@ -3,20 +3,19 @@ import {
     Button, FormGroup, ControlGroup, InputGroup, Card, Elevation
 } from "@blueprintjs/core";
 
-import { Row, Col } from 'react-flexbox-grid';
-
-
 interface GameConsoleProps {
     recentEvents?: any
     sendAction: any
     setName: any
+    sourceAreaId: string
+    strUsed: string
 }
 interface GameConsoleState {
     myName: string
     action: string
     mainAreaId: string
     targetAreaId: string
-    unitsUsed: number
+    unitsUsed: string
 }
 
 
@@ -28,7 +27,7 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
             action: "",
             mainAreaId: "",
             targetAreaId: "",
-            unitsUsed: 0
+            unitsUsed: "0"
         };
     }    
 
@@ -49,13 +48,15 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
         this.setState({unitsUsed:event.target.value});
     }
     handleClick = (event:any) => {
-        this.props.sendAction(this.state.action, this.state.mainAreaId, this.state.targetAreaId, this.state.unitsUsed);
+        this.props.sendAction(this.state.action, this.props.sourceAreaId, this.state.targetAreaId, this.props.strUsed);
     }
     handleNameClick = (event:any) => {
         this.props.setName(this.state.myName);
     }
 
-    
+    handleBasicChange = (event:any) => {
+      
+    }
 
   public render() {
 
@@ -110,7 +111,8 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
                 >
                   <InputGroup placeholder="area ID" 
                     style={{ width:"9em" }}
-                    onChange={this.handlemainAreaIdChange}
+                    value={this.props.sourceAreaId}
+                    onChange={this.handleBasicChange}
                   />
                 </ControlGroup>
               </FormGroup>
@@ -141,6 +143,7 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
                   <InputGroup placeholder="1-100" 
                     style={{ width:"9em" }}
                     onChange={this.handleunitsUsedChange}
+                    value={this.props.strUsed}
                   />
                 </ControlGroup>
               </FormGroup>
