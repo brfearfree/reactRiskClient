@@ -6,6 +6,7 @@ interface MapProps {
   handleAreaClick: any
   selectedArea: number
   targetAreas: Array<number>
+  targetAreaId: number
 }
 
 export class Map extends React.PureComponent<MapProps> {
@@ -49,11 +50,12 @@ export class Map extends React.PureComponent<MapProps> {
         color={area.color}
         x={parseInt(area.x)}
         y={parseInt(area.y)}
-        str={area.str}
-        areaId={area.id}
+        str={parseInt(area.str)}
+        areaId={parseInt(area.id)}
         handleClick={this.props.handleAreaClick}
         isSelected={(id==this.props.selectedArea)?true:false}
         isTargeted={this.props.targetAreas.includes(id)?true:false}
+        isGameTargeted={(this.props.targetAreaId == id)?true:false}
         showLinksTo={(id==this.props.selectedArea)?this.props.targetAreas:[]}
         mainCanvas={this.mapRef}
         allAreas={this.props.areas}

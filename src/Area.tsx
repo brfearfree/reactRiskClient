@@ -14,6 +14,7 @@ interface AreaProps {
     mainCanvas: any
     showLinksTo: Array<number>
     allAreas: Array<any>
+    isGameTargeted: boolean
 }
 
 export class Area extends React.Component<AreaProps> {
@@ -39,9 +40,13 @@ export class Area extends React.Component<AreaProps> {
         ctx.clearRect(0,0, 30, 30);
 
         if(this.props.isTargeted){
-            ctx.fillStyle = "white";
+            if(this.props.isGameTargeted){
+                ctx.fillStyle = "black";
+            }
+            else{
+                ctx.fillStyle = "white";
+            }
             ctx.fillRect(0, 0, 30, 30);
-            
         }
 
         ctx.fillStyle = this.props.color

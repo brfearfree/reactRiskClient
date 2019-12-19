@@ -7,8 +7,13 @@ interface GameConsoleProps {
     recentEvents?: any
     sendAction: any
     setName: any
-    sourceAreaId: string
+    sourceAreaId: number
+    targetAreaId: number
+    targetAreaName: string
     strUsed: string
+    saveMap: any
+    loadMap: any
+    playerid: string
 }
 interface GameConsoleState {
     myName: string
@@ -16,6 +21,7 @@ interface GameConsoleState {
     mainAreaId: string
     targetAreaId: string
     unitsUsed: string
+    scenarioName: string
 }
 
 
@@ -27,14 +33,17 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
             action: "",
             mainAreaId: "",
             targetAreaId: "",
-            unitsUsed: "0"
+            unitsUsed: "0",
+            scenarioName: ""
         };
     }    
 
     handleMyNameChange = (event:any) => {
         this.setState({myName:event.target.value});
     }
-
+    handleScenarioNameChange = (event:any) => {
+      this.setState({scenarioName:event.target.value});
+    }
     handleActionChange = (event:any) => {
         this.setState({action:event.target.value});
     }
@@ -48,7 +57,7 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
         this.setState({unitsUsed:event.target.value});
     }
     handleClick = (event:any) => {
-        this.props.sendAction(this.state.action, this.props.sourceAreaId, this.state.targetAreaId, this.props.strUsed);
+        this.props.sendAction(this.state.action, this.props.sourceAreaId.toString(), this.props.targetAreaId.toString(), this.state.unitsUsed);
     }
     handleNameClick = (event:any) => {
         this.props.setName(this.state.myName);
@@ -57,35 +66,88 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
     handleBasicChange = (event:any) => {
       
     }
+    handleMapSave = (event:any) => {
+      this.props.saveMap(this.state.scenarioName);
+    }
+    handleMapLoad = (event:any) => {
+      this.props.loadMap(this.state.scenarioName);
+    }
+    
+    
 
   public render() {
 
+    let greetingsBlock = (
+      <></>
+    );
 
-    return (
-    <>
-        <Card interactive={true} elevation={Elevation.TWO}>
-            <br/>
-            <FormGroup
-                label="My Name:"
-                labelFor="text-input"
-                inline={true}
-              >
-                <ControlGroup
-                  fill={true}
-                  vertical={false}
-                >
-                  <InputGroup placeholder="Name?" 
-                    style={{ width:"9em" }}
-                    onChange={this.handleMyNameChange}
-                  />
-                </ControlGroup>
-              </FormGroup>
-              <Button
-                icon="arrow-left"
-                text="Set Name"
-                onClick={this.handleNameClick}
-                />
-            <FormGroup
+    let scenariosBlock= (
+      <></>
+    );
+    let actionsBlock= (
+      <></>
+    );
+
+    if(!this.props.playerid){
+      greetingsBlock = (
+      <>
+        <FormGroup
+          label="My Name:"
+          labelFor="text-input"
+          inline={true}
+        >
+          <ControlGroup
+            fill={true}
+            vertical={false}
+          >
+            <InputGroup placeholder="Name?" 
+              style={{ width:"9em" }}
+              onChange={this.handleMyNameChange}
+            />
+          </ControlGroup>
+        </FormGroup>
+        <Button
+          icon="arrow-left"
+          text="Set Name"
+          onClick={this.handleNameClick}
+        />
+      </>
+      );
+
+      scenariosBlock = (
+        <>
+        <FormGroup
+          label="Scenario name"
+          labelFor="text-input"
+          inline={true}
+        >
+          <ControlGroup
+            fill={true}
+            vertical={false}
+          >
+            <InputGroup placeholder="a-zA-Z" 
+              style={{ width:"9em" }}
+              onChange={this.handleScenarioNameChange}
+            />
+          </ControlGroup>
+        </FormGroup>
+        <Button
+          icon="arrow-left"
+          text="Save Map"
+          onClick={this.handleMapSave}
+          />
+        <Button
+          icon="arrow-left"
+          text="Load Map"
+          onClick={this.handleMapLoad}
+          />
+      </>
+      );
+    }
+    else{
+      actionsBlock = (
+        <>
+         <FormGroup
                 label="Action:"
                 labelFor="text-input"
                 inline={true}
@@ -111,7 +173,7 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
                 >
                   <InputGroup placeholder="area ID" 
                     style={{ width:"9em" }}
-                    value={this.props.sourceAreaId}
+                    value={this.props.sourceAreaId.toString()}
                     onChange={this.handleBasicChange}
                   />
                 </ControlGroup>
@@ -127,7 +189,8 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
                 >
                   <InputGroup placeholder="area ID" 
                     style={{ width:"9em" }}
-                    onChange={this.handletargetAreaIdChange}
+                    value={this.props.targetAreaId.toString()}
+                    onChange={this.handleBasicChange}
                   />
                 </ControlGroup>
               </FormGroup>
@@ -143,7 +206,7 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
                   <InputGroup placeholder="1-100" 
                     style={{ width:"9em" }}
                     onChange={this.handleunitsUsedChange}
-                    value={this.props.strUsed}
+                    value={this.state.unitsUsed}
                   />
                 </ControlGroup>
               </FormGroup>
@@ -152,6 +215,17 @@ export class GameConsole extends React.PureComponent<GameConsoleProps, GameConso
                 text="Send"
                 onClick={this.handleClick}
                 />
+        </>
+      );
+    }
+
+    return (
+    <>
+        <Card interactive={true} elevation={Elevation.TWO}>
+            <br/>
+            {greetingsBlock}
+            {actionsBlock}
+            {scenariosBlock}
         </Card>
         <Card interactive={true} elevation={Elevation.TWO}>
             {this.props.recentEvents.map((text:any, id:number) => (
